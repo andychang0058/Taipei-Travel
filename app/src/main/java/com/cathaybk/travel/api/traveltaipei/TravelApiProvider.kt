@@ -6,8 +6,10 @@ import com.cathaybk.travel.api.base.KotlinSerializationConverterFactory
 import com.cathaybk.travel.api.json
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.core.annotation.Factory
 import retrofit2.Retrofit
 
+@Factory
 class TravelApiProvider {
     val api: TravelTaipeiApi by lazy {
         youTubeRetrofit.create(TravelTaipeiApi::class.java)
