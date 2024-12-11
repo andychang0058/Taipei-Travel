@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">台北旅遊網</string>
+    <string name="select_language">選擇語言</string>
+    <string name="select_theme">選擇主題</string>
+    <string name="news">最新消息</string>
+    <string name="attractions">旅遊景點</string>
+    <string name="email">信箱</string>
+    <string name="phone">電話</string>
+    <string name="website">網站</string>
+    <string name="theme_light">淺色主題</string>
+    <string name="theme_dark">深色主題</string>
+    <string name="theme_system">系統主題</string>
+</resources>

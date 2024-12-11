@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Image(
-    @SerialName("src") val src: String?,
-    @SerialName("ext") val ext: String?,
+    @SerialName("src") val src: String? = null,
+    @SerialName("ext") val ext: String? = null,
 )
