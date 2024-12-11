@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">台北トラベル</string>
+    <string name="select_language">言語選択</string>
+    <string name="select_theme">テーマ選択</string>
+    <string name="news">最新ニュース</string>
+    <string name="attractions">観光スポット</string>
+    <string name="email">メール</string>
+    <string name="phone">電話番号</string>
+    <string name="website">ウェブサイト</string>
+    <string name="theme_light">ライト</string>
+    <string name="theme_dark">ダーク</string>
+    <string name="theme_system">システム</string>
+    <string name="language_system">システム言語</string>
+    <string name="language">日本語</string>
+</resources>

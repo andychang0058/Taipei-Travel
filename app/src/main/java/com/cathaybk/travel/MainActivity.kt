@@ -6,9 +6,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.cathaybk.travel.extensions.wrapWithLocale
 import com.cathaybk.travel.ui.TravelApp
 import com.cathaybk.travel.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -35,7 +40,18 @@ class MainActivity : ComponentActivity() {
                     ) { isDarkTheme }
                 )
             }
-            TravelApp(mainViewModel = mainViewModel)
+
+            val displayLanguage by mainViewModel.displayLanguage.collectAsStateWithLifecycle()
+            val selectedLanguage by mainViewModel.selectedLanguage.collectAsStateWithLifecycle()
+            val context = LocalContext.current
+            val languageContext by remember(selectedLanguage) {
+                derivedStateOf {
+                    selectedLanguage?.run { context.wrapWithLocale(displayLanguage.tag) } ?: context
+                }
+            }
+            CompositionLocalProvider(LocalContext provides languageContext) {
+                TravelApp(mainViewModel = mainViewModel)
+            }
         }
     }
 }

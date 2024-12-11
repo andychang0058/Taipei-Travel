@@ -1,6 +1,8 @@
 package com.cathaybk.travel.api.interceptor
 
+import android.app.Application
 import com.cathaybk.travel.api.annotation.LanguageSupport
+import com.cathaybk.travel.extensions.findSystemBestMatchLanguage
 import com.cathaybk.travel.storage.LanguageDataStore
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -10,6 +12,7 @@ import retrofit2.Invocation
 
 @Factory
 class LanguageInterceptor(
+    private val application: Application,
     private val languageDataStore: LanguageDataStore,
 ) : Interceptor {
 
@@ -23,7 +26,9 @@ class LanguageInterceptor(
         if (method == null || method.getAnnotation(LanguageSupport::class.java) == null) {
             return chain.proceed(request)
         }
-        val currentLang = runBlocking { languageDataStore.getLanguage() }
+        val currentLang = runBlocking {
+            languageDataStore.getSelectedLanguage() ?: application.findSystemBestMatchLanguage()
+        }
 
         val originalUrl = request.url
         val firstPathSegment = originalUrl.pathSegments.firstOrNull() ?: ""

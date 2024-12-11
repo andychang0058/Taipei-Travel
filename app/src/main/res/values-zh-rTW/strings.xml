@@ -10,4 +10,6 @@
     <string name="theme_light">淺色主題</string>
     <string name="theme_dark">深色主題</string>
     <string name="theme_system">系統主題</string>
+    <string name="language_system">系統語言</string>
+    <string name="language">繁體中文</string>
 </resources>

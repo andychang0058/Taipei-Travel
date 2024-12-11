@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Viaje a Taipéi</string>
+    <string name="select_language">Seleccionar idioma</string>
+    <string name="select_theme">Seleccionar tema</string>
+    <string name="news">Últimas noticias</string>
+    <string name="attractions">Atracciones turísticas</string>
+    <string name="email">Correo electrónico</string>
+    <string name="phone">Teléfono</string>
+    <string name="website">Sitio web</string>
+    <string name="theme_light">Claro</string>
+    <string name="theme_dark">Oscuro</string>
+    <string name="theme_system">Sistema</string>
+    <string name="language_system">Idioma del sistema</string>
+    <string name="language">Español</string>
+</resources>

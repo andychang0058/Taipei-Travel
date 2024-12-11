@@ -21,6 +21,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.cathaybk.travel.ui.dialog.LanguageChoiceDialog
 import com.cathaybk.travel.ui.dialog.ThemeChoiceDialog
 import com.cathaybk.travel.ui.home.AppToolbar
 import com.cathaybk.travel.ui.home.HomeScreen
@@ -31,6 +32,7 @@ import com.cathaybk.travel.viewmodel.MainViewModel
 fun TravelApp(mainViewModel: MainViewModel) {
     val isDarkTheme by mainViewModel.isDarkTheme.collectAsStateWithLifecycle()
     val currentTheme by mainViewModel.currentTheme.collectAsStateWithLifecycle()
+    val selectedLanguage by mainViewModel.selectedLanguage.collectAsStateWithLifecycle()
 
     TravelTheme(darkTheme = isDarkTheme) {
         val navController = rememberNavController()
@@ -63,7 +65,14 @@ fun TravelApp(mainViewModel: MainViewModel) {
         }
 
         if (showSelectLanguageDialog) {
-            // SelectLanguageDialog(onDismiss = { showSelectLanguageDialog = false })
+            LanguageChoiceDialog(
+                selectedLanguage = selectedLanguage,
+                onLanguageSelected = {
+                    mainViewModel.updateLanguage(it)
+                    showSelectLanguageDialog = false
+                },
+                onDismiss = { showSelectLanguageDialog = false }
+            )
         }
         if (showSelectThemeDialog) {
             ThemeChoiceDialog(

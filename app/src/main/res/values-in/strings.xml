@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Wisata Taipei</string>
+    <string name="select_language">Pilih Bahasa</string>
+    <string name="select_theme">Pilih Tema</string>
+    <string name="news">Berita Terbaru</string>
+    <string name="attractions">Tempat Wisata</string>
+    <string name="email">Email</string>
+    <string name="phone">Telepon</string>
+    <string name="website">Situs Web</string>
+    <string name="theme_light">Terang</string>
+    <string name="theme_dark">Gelap</string>
+    <string name="theme_system">Sistem</string>
+    <string name="language_system">Bahasa Sistem</string>
+    <string name="language">Bahasa Indonesia</string>
+</resources>
