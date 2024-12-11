@@ -1,7 +1,15 @@
 package com.cathaybk.travel.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,23 +36,29 @@ fun TravelApp(mainViewModel: MainViewModel) {
         val navController = rememberNavController()
         var showSelectLanguageDialog by remember { mutableStateOf(false) }
         var showSelectThemeDialog by remember { mutableStateOf(false) }
-
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            topBar = {
-                AppToolbar(
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.background)
+                .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal))
+        ) {
+            Scaffold(
+                modifier = Modifier.fillMaxSize(),
+                topBar = {
+                    AppToolbar(
+                        navController = navController,
+                        onSelectLanguageClick = { showSelectLanguageDialog = true },
+                        onSelectThemeClick = { showSelectThemeDialog = true }
+                    )
+                }
+            ) { innerPadding ->
+                NavHost(
                     navController = navController,
-                    onSelectLanguageClick = { showSelectLanguageDialog = true },
-                    onSelectThemeClick = { showSelectThemeDialog = true }
-                )
-            }
-        ) { innerPadding ->
-            NavHost(
-                navController = navController,
-                startDestination = Screen.Home,
-                modifier = Modifier.padding(innerPadding)
-            ) {
-                composable<Screen.Home> { HomeScreen() }
+                    startDestination = Screen.Home,
+                    modifier = Modifier.padding(innerPadding)
+                ) {
+                    composable<Screen.Home> { HomeScreen() }
+                }
             }
         }
 
