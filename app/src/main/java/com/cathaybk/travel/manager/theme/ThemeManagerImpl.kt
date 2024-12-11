@@ -27,16 +27,19 @@ class ThemeManagerImpl(
     override val currentTheme: StateFlow<ThemeOption> = _currentTheme
 
     init {
-        scope.launch {
-            val theme = themeDataStore.getTheme()
-            notifyThemeChanged(theme)
-        }
+        onThemeConfigChanged()
     }
 
     override fun updateTheme(themeOption: ThemeOption) {
         scope.launch {
             themeDataStore.saveTheme(themeOption)
             notifyThemeChanged(themeOption)
+        }
+    }
+
+    override fun onThemeConfigChanged() {
+        scope.launch {
+            notifyThemeChanged(themeDataStore.getTheme())
         }
     }
 

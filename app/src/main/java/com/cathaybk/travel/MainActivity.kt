@@ -1,5 +1,6 @@
 package com.cathaybk.travel
 
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,8 +9,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -42,16 +43,21 @@ class MainActivity : ComponentActivity() {
             }
 
             val displayLanguage by mainViewModel.displayLanguage.collectAsStateWithLifecycle()
-            val selectedLanguage by mainViewModel.selectedLanguage.collectAsStateWithLifecycle()
             val context = LocalContext.current
-            val languageContext by remember(selectedLanguage) {
-                derivedStateOf {
-                    selectedLanguage?.run { context.wrapWithLocale(displayLanguage.tag) } ?: context
-                }
+            val languageContext by remember(displayLanguage) {
+                mutableStateOf(context.wrapWithLocale(displayLanguage.tag))
             }
             CompositionLocalProvider(LocalContext provides languageContext) {
                 TravelApp(mainViewModel = mainViewModel)
             }
+        }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        mainViewModel.apply {
+            onLanguageConfigChanged()
+            onThemeConfigChanged()
         }
     }
 }

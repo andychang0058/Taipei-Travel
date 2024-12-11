@@ -15,6 +15,7 @@
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
+            android:configChanges="locale|layoutDirection|uiMode"
             android:exported="true"
             android:theme="@style/Theme.Travel">
             <intent-filter>

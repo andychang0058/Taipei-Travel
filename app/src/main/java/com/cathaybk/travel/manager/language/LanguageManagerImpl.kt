@@ -24,16 +24,24 @@ class LanguageManagerImpl(
     private val _displayLanguage = MutableStateFlow<Language>(Language.default)
     override val displayLanguage: StateFlow<Language> = _displayLanguage
 
+    private val _selectedLanguage = MutableStateFlow<Language?>(null)
+    override val selectedLanguage: StateFlow<Language?> = _selectedLanguage
+
     init {
-        scope.launch {
-            val language = withContext(Dispatchers.IO) { languageDataStore.getSelectedLanguage() }
+        onLanguageConfigChanged()
+    }
+
+    override fun updateLanguage(language: Language?) {
+        scope.launch(Dispatchers.IO) {
+            languageDataStore.saveSelectedLanguage(language)
+            _selectedLanguage.update { language }
             notifyLanguageUpdated(language)
         }
     }
 
-    override fun updateDisplayLanguage(language: Language?) {
-        scope.launch(Dispatchers.IO) {
-            languageDataStore.saveSelectedLanguage(language)
+    override fun onLanguageConfigChanged() {
+        scope.launch {
+            val language = withContext(Dispatchers.IO) { languageDataStore.getSelectedLanguage() }
             notifyLanguageUpdated(language)
         }
     }

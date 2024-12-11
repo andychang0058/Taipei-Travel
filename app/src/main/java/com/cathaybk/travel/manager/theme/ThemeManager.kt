@@ -6,4 +6,5 @@ interface ThemeManager {
     val isDarkTheme: StateFlow<Boolean>
     val currentTheme: StateFlow<ThemeOption>
     fun updateTheme(themeOption: ThemeOption)
+    fun onThemeConfigChanged()
 }
