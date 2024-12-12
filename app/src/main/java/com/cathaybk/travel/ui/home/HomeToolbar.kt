@@ -1,20 +1,18 @@
 package com.cathaybk.travel.ui.home
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,14 +41,14 @@ fun AppToolbar(
     var showMenu by remember { mutableStateOf(false) }
     val backStackEntryState by navController.currentBackStackEntryAsState()
     val currentDestination = backStackEntryState?.destination
-    TopAppBar(
-        modifier = Modifier.windowInsetsPadding(WindowInsets.systemBars),
+    CenterAlignedTopAppBar(
+        windowInsets = TopAppBarDefaults.windowInsets,
         title = {
             val textRes = when {
                 currentDestination?.hasRoute<Screen.Home>() == true -> R.string.app_name
                 else -> R.string.app_name
             }
-            Text(stringResource(textRes))
+            Text(text = stringResource(textRes))
         },
         navigationIcon = {
             if (currentDestination?.hasRoute<Screen.Home>() == false) {
@@ -61,7 +59,7 @@ fun AppToolbar(
         },
         actions = {
             IconButton(onClick = { showMenu = !showMenu }) {
-                Icon(Icons.Default.MoreVert, contentDescription = "More")
+                Icon(imageVector = Icons.Default.MoreVert, contentDescription = "More")
             }
             DropdownMenu(
                 expanded = showMenu,
