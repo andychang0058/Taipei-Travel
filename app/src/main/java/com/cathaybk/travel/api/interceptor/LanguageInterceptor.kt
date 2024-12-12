@@ -9,6 +9,7 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import org.koin.core.annotation.Factory
 import retrofit2.Invocation
+import java.util.Locale
 
 @Factory
 class LanguageInterceptor(
@@ -28,7 +29,7 @@ class LanguageInterceptor(
         }
         val currentLang = runBlocking {
             languageDataStore.getSelectedLanguage() ?: application.findSystemBestMatchLanguage()
-        }
+        }.tag.lowercase(Locale.getDefault())
 
         val originalUrl = request.url
         val firstPathSegment = originalUrl.pathSegments.firstOrNull() ?: ""
