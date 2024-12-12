@@ -48,5 +48,6 @@ class LanguageManagerImpl(
 
     private fun notifyLanguageUpdated(language: Language?) {
         _displayLanguage.update { language ?: application.findSystemBestMatchLanguage() }
+        _selectedLanguage.update { language }
     }
 }
