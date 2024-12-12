@@ -12,4 +12,8 @@
     <string name="theme_system">ระบบ</string>
     <string name="language_system">ภาษาระบบ</string>
     <string name="language">ภาษาไทย</string>
+    <string name="more">ดูเพิ่มเติม</string>
+    <string name="error_occurred">เกิดข้อผิดพลาด โปรดลองอีกครั้งในภายหลัง</string>
+    <string name="retry">ลองใหม่</string>
+    <string name="no_more_data">ไม่มีข้อมูลเพิ่มเติม</string>
 </resources>

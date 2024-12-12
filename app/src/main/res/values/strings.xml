@@ -12,4 +12,8 @@
     <string name="theme_system">System</string>
     <string name="language_system">System Language</string>
     <string name="language">English</string>
+    <string name="more">See More</string>
+    <string name="error_occurred">An error occurred, please try again later</string>
+    <string name="retry">Retry</string>
+    <string name="no_more_data">No more data</string>
 </resources>

@@ -12,4 +12,8 @@
     <string name="theme_system">Sistem</string>
     <string name="language_system">Bahasa Sistem</string>
     <string name="language">Bahasa Indonesia</string>
+    <string name="more">Lihat lebih banyak</string>
+    <string name="error_occurred">Terjadi kesalahan, silakan coba lagi nanti</string>
+    <string name="retry">Coba lagi</string>
+    <string name="no_more_data">Tidak ada data lagi</string>
 </resources>

@@ -12,4 +12,8 @@
     <string name="theme_system">システム</string>
     <string name="language_system">システム言語</string>
     <string name="language">日本語</string>
+    <string name="more">もっと見る</string>
+    <string name="error_occurred">エラーが発生しました。後でもう一度お試しください</string>
+    <string name="retry">再試行</string>
+    <string name="no_more_data">これ以上データはありません</string>
 </resources>

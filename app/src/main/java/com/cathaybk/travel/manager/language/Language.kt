@@ -38,7 +38,7 @@ sealed class Language {
     }
 
     data object English : Language() {
-        override val tag: String = "en-US"
+        override val tag: String = "en"
     }
 
     data object ChineseTraditional : Language() {

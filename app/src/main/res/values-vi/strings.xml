@@ -12,4 +12,8 @@
     <string name="theme_system">Hệ thống</string>
     <string name="language_system">Ngôn ngữ hệ thống</string>
     <string name="language">Tiếng Việt</string>
+    <string name="more">Xem thêm</string>
+    <string name="error_occurred">Đã xảy ra lỗi, vui lòng thử lại sau</string>
+    <string name="retry">Thử lại</string>
+    <string name="no_more_data">没有更多数据</string>
 </resources>
