@@ -1,5 +1,8 @@
 package com.cathaybk.travel.ui
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -25,6 +28,7 @@ import com.cathaybk.travel.ui.dialog.LanguageChoiceDialog
 import com.cathaybk.travel.ui.dialog.ThemeChoiceDialog
 import com.cathaybk.travel.ui.home.AppToolbar
 import com.cathaybk.travel.ui.home.HomeScreen
+import com.cathaybk.travel.ui.news.NewsScreen
 import com.cathaybk.travel.ui.theme.TravelTheme
 import com.cathaybk.travel.viewmodel.MainViewModel
 
@@ -59,7 +63,29 @@ fun TravelApp(mainViewModel: MainViewModel) {
                     startDestination = Screen.Home,
                     modifier = Modifier.padding(innerPadding)
                 ) {
-                    composable<Screen.Home> { HomeScreen() }
+                    composable<Screen.Home> {
+                        HomeScreen(
+                            onMoreNewsClicked = { navController.navigate(Screen.News) }
+                        )
+                    }
+                    composable<Screen.News>(
+                        enterTransition = {
+                            slideInHorizontally(
+                                initialOffsetX = { fullWidth -> fullWidth },
+                                animationSpec = tween(300)
+                            )
+                        },
+                        exitTransition = {
+                            slideOutHorizontally(
+                                targetOffsetX = { fullWidth -> fullWidth },
+                                animationSpec = tween(300)
+                            )
+                        }
+                    ) {
+                        NewsScreen(
+                            onNewsClicked = {}
+                        )
+                    }
                 }
             }
         }

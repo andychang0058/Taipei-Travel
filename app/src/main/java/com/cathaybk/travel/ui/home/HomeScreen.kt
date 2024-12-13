@@ -75,6 +75,7 @@ fun HomeScreen(
         ) {
             items(
                 count = pagingItems.itemCount,
+                contentType = { index -> pagingItems[index]?.javaClass },
                 key = { index -> pagingItems[index]?.id ?: index }
             ) { index ->
                 val item = pagingItems[index] ?: return@items

@@ -46,6 +46,7 @@ fun AppToolbar(
         title = {
             val textRes = when {
                 currentDestination?.hasRoute<Screen.Home>() == true -> R.string.app_name
+                currentDestination?.hasRoute<Screen.News>() == true -> R.string.news
                 else -> R.string.app_name
             }
             Text(text = stringResource(textRes))
@@ -58,6 +59,9 @@ fun AppToolbar(
             }
         },
         actions = {
+            if (currentDestination?.hasRoute<Screen.Home>() == false) {
+                return@CenterAlignedTopAppBar
+            }
             IconButton(onClick = { showMenu = !showMenu }) {
                 Icon(imageVector = Icons.Default.MoreVert, contentDescription = "More")
             }

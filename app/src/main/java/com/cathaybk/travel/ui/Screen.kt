@@ -8,5 +8,8 @@ sealed class Screen() {
     data object Home
 
     @Serializable
+    data object News
+
+    @Serializable
     data class AttractionDetail(val attraction: Attraction)
 }
