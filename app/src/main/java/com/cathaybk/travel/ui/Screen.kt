@@ -11,5 +11,8 @@ sealed class Screen() {
     data object News
 
     @Serializable
+    data class Web(val url: String)
+
+    @Serializable
     data class AttractionDetail(val attraction: Attraction)
 }

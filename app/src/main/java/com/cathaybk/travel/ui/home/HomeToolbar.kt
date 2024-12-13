@@ -11,6 +11,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -21,45 +22,41 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.cathaybk.travel.R
-import com.cathaybk.travel.ui.Screen
 import com.cathaybk.travel.ui.theme.TravelTheme
 
 @SuppressLint("RestrictedApi")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppToolbar(
-    navController: NavHostController,
+    title: String,
+    showNavigation: Boolean = false,
+    showMoreSettings: Boolean = true,
     onSelectLanguageClick: () -> Unit = {},
     onSelectThemeClick: () -> Unit = {},
+    onNavigationClicked: () -> Unit = {},
 ) {
     var showMenu by remember { mutableStateOf(false) }
-    val backStackEntryState by navController.currentBackStackEntryAsState()
-    val currentDestination = backStackEntryState?.destination
     CenterAlignedTopAppBar(
         windowInsets = TopAppBarDefaults.windowInsets,
         title = {
-            val textRes = when {
-                currentDestination?.hasRoute<Screen.Home>() == true -> R.string.app_name
-                currentDestination?.hasRoute<Screen.News>() == true -> R.string.news
-                else -> R.string.app_name
-            }
-            Text(text = stringResource(textRes))
+            Text(
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                text = title
+            )
         },
         navigationIcon = {
-            if (currentDestination?.hasRoute<Screen.Home>() == false) {
-                IconButton(onClick = { navController.navigateUp() }) {
+            if (showNavigation) {
+                IconButton(onClick = { onNavigationClicked }) {
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                 }
             }
         },
         actions = {
-            if (currentDestination?.hasRoute<Screen.Home>() == false) {
+            if (showMoreSettings.not()) {
                 return@CenterAlignedTopAppBar
             }
             IconButton(onClick = { showMenu = !showMenu }) {
@@ -101,7 +98,12 @@ fun MenuText(text: String) {
 @Composable
 fun HomeToolbarPreview() {
     TravelTheme {
-        val navController = rememberNavController()
-        AppToolbar(navController = navController)
+        Surface {
+            AppToolbar(
+                title = stringResource(R.string.app_name),
+                showMoreSettings = true,
+                showNavigation = true,
+            )
+        }
     }
 }
