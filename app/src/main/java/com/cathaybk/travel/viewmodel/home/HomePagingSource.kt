@@ -12,17 +12,14 @@ class HomePagingSource(
 ) : PagingSource<Int, HomePagingData>() {
 
     override fun getRefreshKey(state: PagingState<Int, HomePagingData>): Int? {
-        return state.anchorPosition?.let { anchorPosition ->
-            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
-                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
-        }
+        return 1
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, HomePagingData> {
         return try {
             val page = params.key ?: 1
             if (page == 1) {
-                return loadFirstPaging(params)
+                return loadFirstPaging()
             }
 
             val resultData = mutableListOf<HomePagingData>()
@@ -39,7 +36,7 @@ class HomePagingSource(
 
             return LoadResult.Page(
                 data = resultData,
-                prevKey = page - 1,
+                prevKey = null,
                 nextKey = if (resultData.isEmpty() || resultData.size < params.loadSize) null else page + 1,
             )
         } catch (e: Exception) {
@@ -47,7 +44,7 @@ class HomePagingSource(
         }
     }
 
-    private suspend fun loadFirstPaging(params: LoadParams<Int>): LoadResult<Int, HomePagingData> {
+    private suspend fun loadFirstPaging(): LoadResult<Int, HomePagingData> {
         val loadResult: LoadResult<Int, HomePagingData> = withContext(Dispatchers.IO) {
             val newsDeferred = async { travelRepo.getEventNews(1) }
             val attractionsDeferred = async { travelRepo.getAttractions(1) }
@@ -68,10 +65,12 @@ class HomePagingSource(
                 }
             }
 
+            val attractionSize = data.count { it is HomePagingData.AttractionData }
+
             LoadResult.Page(
                 data = data,
                 prevKey = null,
-                nextKey = if (data.size < params.loadSize) null else 2,
+                nextKey = if (attractionSize <= 0) null else 2,
             )
         }
         return loadResult

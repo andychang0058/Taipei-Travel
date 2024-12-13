@@ -23,10 +23,10 @@ class HomeViewModel(
     val pagingSource: Flow<PagingData<HomePagingData>> =
         Pager(
             config = PagingConfig(
-                // The api always returns 30 items per page
                 initialLoadSize = 30,
                 pageSize = 30,
                 prefetchDistance = 10,
+                enablePlaceholders = false,
             )
         ) { HomePagingSource(travelRepo).also { attractionSource = it } }
             .flow.cachedIn(viewModelScope)
