@@ -19,6 +19,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -59,7 +60,7 @@ fun TravelApp(mainViewModel: MainViewModel) {
         val backStackEntryState by navController.currentBackStackEntryAsState()
         val currentDestination = backStackEntryState?.destination
 
-        var customAppBarTitle by remember { mutableStateOf("") }
+        var customAppBarTitle by rememberSaveable { mutableStateOf("") }
 
         val showNavigation by remember(currentDestination) {
             derivedStateOf {
