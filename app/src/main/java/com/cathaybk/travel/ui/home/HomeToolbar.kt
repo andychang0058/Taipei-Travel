@@ -50,7 +50,7 @@ fun AppToolbar(
         },
         navigationIcon = {
             if (showNavigation) {
-                IconButton(onClick = { onNavigationClicked }) {
+                IconButton(onClick = { onNavigationClicked() }) {
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                 }
             }
