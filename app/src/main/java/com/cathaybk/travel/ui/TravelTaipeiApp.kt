@@ -75,6 +75,13 @@ fun TravelApp(mainViewModel: MainViewModel) {
 
         val context = LocalContext.current
 
+        val navigateToWeb: (String) -> Unit = remember {
+            { url ->
+                customAppBarTitle = ""
+                navController.navigate(Screen.Web(url))
+            }
+        }
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -113,7 +120,7 @@ fun TravelApp(mainViewModel: MainViewModel) {
                                 navController.navigate(Screen.News)
                             },
                             onNewsClicked = {
-                                it.url?.let { url -> navController.navigate(Screen.Web(url)) }
+                                it.url?.let { url -> navigateToWeb(url) }
                             },
                             onAttractionClicked = { attraction ->
                                 customAppBarTitle = attraction.name.orEmpty()
@@ -130,7 +137,7 @@ fun TravelApp(mainViewModel: MainViewModel) {
                     ) {
                         NewsScreen(
                             onNewsClicked = {
-                                it.url?.let { url -> navController.navigate(Screen.Web(url)) }
+                                it.url?.let { url -> navigateToWeb(url) }
                             }
                         )
                     }
@@ -158,7 +165,7 @@ fun TravelApp(mainViewModel: MainViewModel) {
                     ) { backStackEntry ->
                         AttractionScreen(
                             attraction = backStackEntry.toRoute<Screen.AttractionDetail>().attraction,
-                            onOfficialSiteClicked = { url -> navController.navigate(Screen.Web(url)) },
+                            onOfficialSiteClicked = { url -> navigateToWeb(url) },
                             onLocationClicked = { lat, lng, address ->
                                 Utils.openGoogleMapWithAddress(
                                     context = context,
