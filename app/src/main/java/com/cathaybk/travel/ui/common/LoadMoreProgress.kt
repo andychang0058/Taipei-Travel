@@ -10,7 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import com.cathaybk.travel.ui.theme.TravelTheme
+import com.cathaybk.travel.ui.base.theme.TravelTheme
 
 @Composable
 fun LoadMoreProgress() {

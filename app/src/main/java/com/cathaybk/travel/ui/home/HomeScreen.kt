@@ -15,7 +15,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,7 +54,7 @@ fun HomeScreen(
         return
     }
 
-    val firstAttractionId by remember(pagingItems) {
+    val firstAttractionId by remember {
         derivedStateOf {
             (0 until pagingItems.itemCount)
                 .firstOrNull { pagingItems[it] is HomePagingData.AttractionData }
@@ -98,8 +97,8 @@ fun HomeScreen(
 
                     is HomePagingData.AttractionData -> {
                         val attraction = item.attraction
-                        val description by remember(attraction) {
-                            mutableStateOf(attraction.introduction?.replace(Regex("\\n"), ""))
+                        val description = remember(attraction.introduction) {
+                            attraction.introduction?.replace(Regex("\\n"), "").orEmpty()
                         }
                         if (attraction.id == firstAttractionId) {
                             HomeSectionTitle(

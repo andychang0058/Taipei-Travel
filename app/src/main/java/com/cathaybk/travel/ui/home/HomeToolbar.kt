@@ -25,7 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.cathaybk.travel.R
-import com.cathaybk.travel.ui.theme.TravelTheme
+import com.cathaybk.travel.ui.base.theme.TravelTheme
 
 @SuppressLint("RestrictedApi")
 @OptIn(ExperimentalMaterial3Api::class)

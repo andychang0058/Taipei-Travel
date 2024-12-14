@@ -1,4 +1,4 @@
-package com.cathaybk.travel.ui.theme
+package com.cathaybk.travel.ui.base.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

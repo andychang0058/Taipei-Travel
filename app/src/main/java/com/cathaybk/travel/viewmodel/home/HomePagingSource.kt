@@ -12,42 +12,49 @@ class HomePagingSource(
 ) : PagingSource<Int, HomePagingData>() {
 
     override fun getRefreshKey(state: PagingState<Int, HomePagingData>): Int? {
-        return 1
+        return state.anchorPosition?.let { anchorPosition ->
+            val anchorPage = state.closestPageToPosition(anchorPosition)
+            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
+        }
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, HomePagingData> {
         return try {
             val page = params.key ?: 1
-            if (page == 1) {
-                return loadFirstPaging()
-            }
-
-            val resultData = mutableListOf<HomePagingData>()
-            travelRepo.getAttractions(page = page).fold(
-                onSuccess = {
-                    it.data?.forEach { attraction ->
-                        resultData.add(HomePagingData.AttractionData(attraction))
-                    }
-                },
-                onFailure = {
-                    return LoadResult.Error(it)
-                }
-            )
-
-            return LoadResult.Page(
-                data = resultData,
-                prevKey = null,
-                nextKey = if (resultData.isEmpty() || resultData.size < params.loadSize) null else page + 1,
-            )
+            if (page == 1) loadFirstPaging() else loadNextPage(page, params)
         } catch (e: Exception) {
             LoadResult.Error(e)
         }
+    }
+
+    private suspend fun loadNextPage(
+        page: Int,
+        params: LoadParams<Int>
+    ): LoadResult<Int, HomePagingData> = withContext(Dispatchers.IO) {
+
+        travelRepo.getAttractions(page = page).fold(
+            onSuccess = { response ->
+                val attractions = response.data.orEmpty()
+                val nextKey =
+                    if (attractions.isEmpty() || attractions.size < params.loadSize) null else page + 1
+
+                LoadResult.Page(
+                    data = attractions.map { HomePagingData.AttractionData(it) },
+                    prevKey = null,
+                    nextKey = nextKey,
+                )
+            },
+            onFailure = { error ->
+                LoadResult.Error(error)
+            }
+        )
     }
 
     private suspend fun loadFirstPaging(): LoadResult<Int, HomePagingData> {
         val loadResult: LoadResult<Int, HomePagingData> = withContext(Dispatchers.IO) {
             val newsDeferred = async { travelRepo.getEventNews(1) }
             val attractionsDeferred = async { travelRepo.getAttractions(1) }
+
             val newsResult = newsDeferred.await()
             val attractionsResult = attractionsDeferred.await()
 
@@ -58,7 +65,7 @@ class HomePagingSource(
                 return@withContext LoadResult.Error(error)
             }
 
-            val data = mutableListOf<HomePagingData>().apply {
+            val data = buildList {
                 add(HomePagingData.NewsData(newsResult.getOrNull()?.data ?: emptyList()))
                 attractionsResult.getOrNull()?.data?.forEach { attraction ->
                     add(HomePagingData.AttractionData(attraction))

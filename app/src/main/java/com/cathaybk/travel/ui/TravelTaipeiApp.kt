@@ -15,11 +15,13 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -29,14 +31,19 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.cathaybk.travel.R
+import com.cathaybk.travel.model.Attraction
+import com.cathaybk.travel.ui.attraction.AttractionDataNavType
+import com.cathaybk.travel.ui.attraction.AttractionScreen
+import com.cathaybk.travel.ui.base.theme.TravelTheme
 import com.cathaybk.travel.ui.dialog.LanguageChoiceDialog
 import com.cathaybk.travel.ui.dialog.ThemeChoiceDialog
 import com.cathaybk.travel.ui.home.AppToolbar
 import com.cathaybk.travel.ui.home.HomeScreen
 import com.cathaybk.travel.ui.news.NewsScreen
-import com.cathaybk.travel.ui.theme.TravelTheme
 import com.cathaybk.travel.ui.webview.WebViewScreen
+import com.cathaybk.travel.utils.Utils
 import com.cathaybk.travel.viewmodel.MainViewModel
+import kotlin.reflect.typeOf
 
 @Composable
 fun TravelApp(mainViewModel: MainViewModel) {
@@ -52,14 +59,21 @@ fun TravelApp(mainViewModel: MainViewModel) {
         val backStackEntryState by navController.currentBackStackEntryAsState()
         val currentDestination = backStackEntryState?.destination
 
-        var topAppBarTitle by remember(currentDestination) { mutableStateOf("") }
+        var customAppBarTitle by remember { mutableStateOf("") }
+
         val showNavigation by remember(currentDestination) {
-            mutableStateOf(currentDestination?.hasRoute<Screen.Home>() == false)
+            derivedStateOf {
+                currentDestination?.hasRoute<Screen.Home>() == false
+            }
         }
         val showMoreSettings by remember(currentDestination) {
-            mutableStateOf(currentDestination?.hasRoute<Screen.Home>() == true)
+            derivedStateOf {
+                currentDestination?.hasRoute<Screen.Home>() == true
+            }
         }
-        topAppBarTitle
+
+        val context = LocalContext.current
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -69,13 +83,13 @@ fun TravelApp(mainViewModel: MainViewModel) {
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
                 topBar = {
-                    topAppBarTitle = when {
+                    val title = when {
                         currentDestination?.hasRoute<Screen.Home>() == true -> stringResource(R.string.app_name)
                         currentDestination?.hasRoute<Screen.News>() == true -> stringResource(R.string.news)
-                        else -> topAppBarTitle
+                        else -> customAppBarTitle
                     }
                     AppToolbar(
-                        title = topAppBarTitle,
+                        title = title,
                         showNavigation = showNavigation,
                         showMoreSettings = showMoreSettings,
                         onSelectLanguageClick = { showSelectLanguageDialog = true },
@@ -99,9 +113,14 @@ fun TravelApp(mainViewModel: MainViewModel) {
                             },
                             onNewsClicked = {
                                 it.url?.let { url -> navController.navigate(Screen.Web(url)) }
+                            },
+                            onAttractionClicked = { attraction ->
+                                customAppBarTitle = attraction.name.orEmpty()
+                                navController.navigate(Screen.AttractionDetail(attraction))
                             }
                         )
                     }
+
                     composable<Screen.News>(
                         enterTransition = { enterTransition },
                         exitTransition = null,
@@ -114,6 +133,7 @@ fun TravelApp(mainViewModel: MainViewModel) {
                             }
                         )
                     }
+
                     composable<Screen.Web>(
                         enterTransition = null,
                         exitTransition = null,
@@ -122,7 +142,30 @@ fun TravelApp(mainViewModel: MainViewModel) {
                     ) { backStackEntry ->
                         WebViewScreen(
                             url = backStackEntry.toRoute<Screen.Web>().url,
-                            onTitleChanged = { title -> topAppBarTitle = title }
+                            onTitleChanged = { title -> customAppBarTitle = title }
+                        )
+                    }
+
+                    composable<Screen.AttractionDetail>(
+                        typeMap = mapOf(
+                            typeOf<Attraction>() to AttractionDataNavType()
+                        ),
+                        enterTransition = { enterTransition },
+                        exitTransition = null,
+                        popEnterTransition = null,
+                        popExitTransition = { exitTransition },
+                    ) { backStackEntry ->
+                        AttractionScreen(
+                            attraction = backStackEntry.toRoute<Screen.AttractionDetail>().attraction,
+                            onOfficialSiteClicked = { url -> navController.navigate(Screen.Web(url)) },
+                            onLocationClicked = { lat, lng, address ->
+                                Utils.openGoogleMapWithAddress(
+                                    context = context,
+                                    lat = lat,
+                                    lng = lng,
+                                    address = address,
+                                )
+                            }
                         )
                     }
                 }

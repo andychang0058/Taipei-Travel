@@ -14,7 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import com.cathaybk.travel.ui.theme.TravelTheme
+import com.cathaybk.travel.ui.base.theme.TravelTheme
 
 @Composable
 fun NewsCell(

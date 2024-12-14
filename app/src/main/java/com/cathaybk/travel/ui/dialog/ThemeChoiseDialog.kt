@@ -8,7 +8,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.cathaybk.travel.R
 import com.cathaybk.travel.manager.theme.ThemeOption
-import com.cathaybk.travel.ui.theme.TravelTheme
+import com.cathaybk.travel.ui.base.theme.TravelTheme
 
 @Composable
 fun ThemeChoiceDialog(

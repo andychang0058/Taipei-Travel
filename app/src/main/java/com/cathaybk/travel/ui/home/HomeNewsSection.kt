@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.cathaybk.travel.R
 import com.cathaybk.travel.model.News
-import com.cathaybk.travel.ui.theme.TravelTheme
+import com.cathaybk.travel.ui.base.theme.TravelTheme
 
 @Composable
 fun HomeNewsSection(

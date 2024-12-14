@@ -25,7 +25,7 @@ class HomeViewModel(
             config = PagingConfig(
                 initialLoadSize = 30,
                 pageSize = 30,
-                prefetchDistance = 10,
+                prefetchDistance = 5,
                 enablePlaceholders = false,
             )
         ) { HomePagingSource(travelRepo).also { attractionSource = it } }

@@ -1,5 +1,7 @@
 package com.cathaybk.travel.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -10,6 +12,7 @@ data class AttractionResponse(
 )
 
 
+@Parcelize
 @Serializable
 data class Attraction(
     @SerialName("id") val id: String,
@@ -25,4 +28,4 @@ data class Attraction(
     @SerialName("official_site") val officialSite: String? = null,
     @SerialName("url") val url: String? = null,
     @SerialName("images") val images: List<Image>? = null
-)
+) : Parcelable
