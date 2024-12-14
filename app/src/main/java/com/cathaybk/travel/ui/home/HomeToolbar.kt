@@ -20,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -71,14 +72,26 @@ fun AppToolbar(
                         showMenu = false
                         onSelectLanguageClick()
                     },
-                    text = { MenuText(stringResource(R.string.select_language)) }
+                    text = { MenuText(stringResource(R.string.select_language)) },
+                    leadingIcon = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_language),
+                            contentDescription = null
+                        )
+                    }
                 )
                 DropdownMenuItem(
                     onClick = {
                         showMenu = false
                         onSelectThemeClick()
                     },
-                    text = { MenuText(stringResource(R.string.select_theme)) }
+                    text = { MenuText(stringResource(R.string.select_theme)) },
+                    leadingIcon = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_contrast),
+                            contentDescription = null
+                        )
+                    }
                 )
             }
         }
