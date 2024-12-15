@@ -27,6 +27,7 @@ import com.cathaybk.travel.ui.base.theme.TravelTheme
 @Composable
 fun ScreenError(
     modifier: Modifier = Modifier,
+    message: String,
     onRetry: () -> Unit = {},
 ) {
     Column(
@@ -45,7 +46,7 @@ fun ScreenError(
 
         Text(
             modifier = Modifier.padding(horizontal = 24.dp),
-            text = stringResource(R.string.error_occurred),
+            text = message,
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurface
@@ -64,7 +65,7 @@ fun ScreenError(
 fun HomeErrorPreview() {
     TravelTheme {
         Surface {
-            ScreenError()
+            ScreenError(message = stringResource(R.string.error_occurred))
         }
     }
 }

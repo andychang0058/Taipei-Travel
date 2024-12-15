@@ -16,4 +16,5 @@
     <string name="error_occurred">Terjadi kesalahan, silakan coba lagi nanti</string>
     <string name="retry">Coba lagi</string>
     <string name="no_more_data">Tidak ada data lagi</string>
+    <string name="empty_data">Data tidak ditemukan</string>
 </resources>

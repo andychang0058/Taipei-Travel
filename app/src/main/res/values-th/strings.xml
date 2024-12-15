@@ -16,4 +16,5 @@
     <string name="error_occurred">เกิดข้อผิดพลาด โปรดลองอีกครั้งในภายหลัง</string>
     <string name="retry">ลองใหม่</string>
     <string name="no_more_data">ไม่มีข้อมูลเพิ่มเติม</string>
+    <string name="empty_data">ไม่พบข้อมูล</string>
 </resources>

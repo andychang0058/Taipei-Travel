@@ -1,6 +1,3 @@
-import org.gradle.kotlin.dsl.kotlin
-import org.gradle.kotlin.dsl.plugin
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -59,8 +56,6 @@ dependencies {
     implementation(libs.androidx.ui.compose.constraint)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.paging.runtime)
-    implementation(libs.androidx.paging.compose)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material)
     implementation(libs.androidx.datastore)
@@ -69,8 +64,6 @@ dependencies {
     implementation(libs.koin.annotations)
     implementation(libs.kotlin.serialization)
     ksp(libs.koin.ksp.compiler)
-    implementation(libs.facebook.flipper)
-    implementation(libs.facebook.soloader)
     implementation(libs.coil)
     implementation(libs.coil.compose)
     implementation(libs.coil.okhttp)
@@ -80,11 +73,13 @@ dependencies {
     implementation(libs.squareup.retrofit)
     implementation(libs.squareup.retrofit.converter.kotlinx.serialization)
     testImplementation(libs.junit)
+    testImplementation(libs.kotlin.coroutine.test)
+    testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    debugImplementation(libs.facebook.flipper.network.plugin)
 }

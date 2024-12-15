@@ -20,7 +20,7 @@ fun LoadMoreError(onRetry: () -> Unit = {}) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(32.dp),
         contentAlignment = Alignment.Center
     ) {
         Button(onClick = onRetry) {

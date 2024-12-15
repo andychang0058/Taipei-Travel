@@ -15,5 +15,6 @@
     <string name="more">Xem thêm</string>
     <string name="error_occurred">Đã xảy ra lỗi, vui lòng thử lại sau</string>
     <string name="retry">Thử lại</string>
-    <string name="no_more_data">没有更多数据</string>
+    <string name="no_more_data">Không còn dữ liệu</string>
+    <string name="empty_data">Không tìm thấy dữ liệu</string>
 </resources>

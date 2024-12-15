@@ -16,4 +16,5 @@
     <string name="error_occurred">오류가 발생했습니다. 나중에 다시 시도해주세요</string>
     <string name="retry">다시 시도</string>
     <string name="no_more_data">더 이상 데이터가 없습니다</string>
+    <string name="empty_data">데이터를 찾을 수 없습니다</string>
 </resources>

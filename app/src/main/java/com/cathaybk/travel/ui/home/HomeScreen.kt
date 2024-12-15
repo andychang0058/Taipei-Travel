@@ -20,11 +20,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.paging.LoadState
-import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cathaybk.travel.R
+import com.cathaybk.travel.extensions.ObserveBottomReached
 import com.cathaybk.travel.model.Attraction
+import com.cathaybk.travel.model.LoadIntent
 import com.cathaybk.travel.model.News
+import com.cathaybk.travel.model.RequestState
 import com.cathaybk.travel.ui.common.LoadMoreError
 import com.cathaybk.travel.ui.common.LoadMoreProgress
 import com.cathaybk.travel.ui.common.LoadNoMoreData
@@ -41,24 +43,23 @@ fun HomeScreen(
     onAttractionClicked: (Attraction) -> Unit = {},
 ) {
     val viewModel: HomeViewModel = koinViewModel()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val lazyListState = rememberLazyListState()
-    val pagingItems = viewModel.pagingSource.collectAsLazyPagingItems()
+
+    lazyListState.ObserveBottomReached {
+        viewModel.loadIntent(LoadIntent.LoadMore)
+    }
 
     val pullRefreshState = rememberPullRefreshState(
-        refreshing = pagingItems.loadState.refresh is LoadState.Loading,
-        onRefresh = { viewModel.refresh() }
+        refreshing = uiState.state is RequestState.Refresh,
+        onRefresh = {
+            viewModel.loadIntent(LoadIntent.Refresh)
+        }
     )
-
-    if (pagingItems.loadState.refresh is LoadState.Error) {
-        ScreenError(onRetry = { viewModel.refresh() })
-        return
-    }
 
     val firstAttractionId by remember {
         derivedStateOf {
-            (0 until pagingItems.itemCount)
-                .firstOrNull { pagingItems[it] is HomePagingData.AttractionData }
-                ?.let { pagingItems[it]?.id }
+            uiState.data?.firstOrNull { it is HomePagingData.AttractionData }?.id
         }
     }
 
@@ -73,12 +74,11 @@ fun HomeScreen(
             state = lazyListState
         ) {
             items(
-                count = pagingItems.itemCount,
-                contentType = { index -> pagingItems[index]?.javaClass },
-                key = { index -> pagingItems[index]?.id ?: index }
+                count = uiState.data?.size ?: 0,
+                contentType = { index -> uiState.data?.getOrNull(index)?.javaClass },
+                key = { index -> uiState.data?.getOrNull(index)?.id.orEmpty() }
             ) { index ->
-                val item = pagingItems[index] ?: return@items
-                when (item) {
+                when (val item = uiState.data?.getOrNull(index) ?: return@items) {
                     is HomePagingData.NewsData -> {
                         if (item.news.isEmpty()) return@items
 
@@ -86,13 +86,18 @@ fun HomeScreen(
                             modifier = Modifier.padding(8.dp),
                             title = stringResource(R.string.news),
                         )
+
                         HomeNewsSection(
                             news = item.news,
                             onNewsClicked = onNewsClicked,
                             onMoreClicked = onMoreNewsClicked,
                         )
+
                         Spacer(modifier = Modifier.height(8.dp))
-                        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+
+                        if (firstAttractionId.isNullOrEmpty().not()) {
+                            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                        }
                     }
 
                     is HomePagingData.AttractionData -> {
@@ -106,35 +111,63 @@ fun HomeScreen(
                                 title = stringResource(R.string.attractions),
                             )
                         }
+
                         HomeAttractionCell(
                             modifier = Modifier.padding(bottom = 24.dp),
                             imageUrl = attraction.images?.firstOrNull()?.src.orEmpty(),
                             title = attraction.name.orEmpty(),
-                            description = description.orEmpty(),
+                            description = description,
                             onCellClicked = { onAttractionClicked(attraction) },
                         )
                     }
                 }
             }
 
-            when (val appendState = pagingItems.loadState.append) {
-                is LoadState.Loading -> {
+            when (val state = uiState.state) {
+                is RequestState.Loading -> {
                     item { LoadMoreProgress() }
                 }
 
-                is LoadState.Error -> {
-                    item { LoadMoreError(onRetry = { pagingItems.retry() }) }
+                is RequestState.LoadError -> {
+                    item {
+                        LoadMoreError(
+                            onRetry = { viewModel.loadIntent(LoadIntent.RetryLoadMore) }
+                        )
+                    }
                 }
 
-                is LoadState.NotLoading -> {
-                    if (appendState.endOfPaginationReached.not()) return@LazyColumn
-                    item { LoadNoMoreData() }
+                is RequestState.Success -> {
+                    if (uiState.data?.isEmpty() == true) {
+                        item {
+                            ScreenError(
+                                modifier = Modifier.fillParentMaxSize(),
+                                message = stringResource(R.string.empty_data),
+                                onRetry = { viewModel.loadIntent(LoadIntent.Refresh) }
+                            )
+                        }
+                    }
+
+                    if (state.isReachedEnd && firstAttractionId.isNullOrEmpty().not()) {
+                        item { LoadNoMoreData() }
+                    }
                 }
+
+                is RequestState.RefreshError -> {
+                    item {
+                        ScreenError(
+                            modifier = Modifier.fillParentMaxSize(),
+                            message = stringResource(R.string.error_occurred),
+                            onRetry = { viewModel.loadIntent(LoadIntent.Refresh) }
+                        )
+                    }
+                }
+
+                else -> {}
             }
         }
 
         PullRefreshIndicator(
-            refreshing = pagingItems.loadState.refresh is LoadState.Loading,
+            refreshing = uiState.state is RequestState.Refresh,
             state = pullRefreshState,
             modifier = Modifier.align(Alignment.TopCenter)
         )
